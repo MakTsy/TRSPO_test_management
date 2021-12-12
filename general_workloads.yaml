@@ -1,0 +1,421 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-test-passing
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgres-test-passing
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-test-passing
+spec:
+  selector:
+    matchLabels:
+      app: postgres-test-passing
+  template:
+    metadata:
+      labels:
+        app: postgres-test-passing
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.6.5
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-test-passing
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DATABASE
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: mynewpassword
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-test-management
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgres-test-management
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-test-management
+spec:
+  selector:
+    matchLabels:
+      app: postgres-test-management
+  template:
+    metadata:
+      labels:
+        app: postgres-test-management
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.6.5
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-test-management
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DATABASE
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: mynewpassword
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-test-report
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgres-test-report
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-test-report
+spec:
+  selector:
+    matchLabels:
+      app: postgres-test-report
+  template:
+    metadata:
+      labels:
+        app: postgres-test-report
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.6.5
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-test-report
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DATABASE
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: mynewpassword
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-user-management
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgres-user-management
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-user-management
+spec:
+  selector:
+    matchLabels:
+      app: postgres-user-management
+  template:
+    metadata:
+      labels:
+        app: postgres-user-management
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.6.5
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-user-management
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DATABASE
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: mynewpassword
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-test-passing
+spec:
+  selector:
+    app: service-test-passing
+  type: NodePort
+  ports:
+    - name: http
+      port: 8081
+      nodePort: 31001
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-test-passing
+spec:
+  selector:
+    matchLabels:
+      app: service-test-passing
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: service-test-passing
+    spec:
+      containers:
+        - name: server
+          image: maktsy/service-test-passing
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-test-passing
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DATABASE
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: mynewpassword
+          ports:
+            - name: http
+              containerPort: 8081
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-test-management
+spec:
+  selector:
+    app: service-test-management
+  type: NodePort
+  ports:
+    - name: http
+      port: 8082
+      nodePort: 31002
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-test-management
+spec:
+  selector:
+    matchLabels:
+      app: service-test-management
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: service-test-management
+    spec:
+      containers:
+        - name: server
+          image: maktsy/service-test-management
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-test-management
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DATABASE
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: mynewpassword
+          ports:
+            - name: http
+              containerPort: 8082
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-user-management
+spec:
+  selector:
+    app: service-user-management
+  type: NodePort
+  ports:
+    - name: http
+      port: 8083
+      nodePort: 31000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-user-management
+spec:
+  selector:
+    matchLabels:
+      app: service-user-management
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: service-user-management
+    spec:
+      containers:
+        - name: server
+          image: maktsy/service-user-management
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-user-management
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DATABASE
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: mynewpassword
+          ports:
+            - name: http
+              containerPort: 8083
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-test-passing
+spec:
+  selector:
+    app: service-test-passing
+  type: NodePort
+  ports:
+    - name: http
+      port: 8081
+      nodePort: 31001
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-test-passing
+spec:
+  selector:
+    matchLabels:
+      app: service-test-passing
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: service-test-passing
+    spec:
+      containers:
+        - name: server
+          image: maktsy/service-test-passing
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-test-passing
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DATABASE
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: mynewpassword
+          ports:
+            - name: http
+              containerPort: 8081
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-test-report
+spec:
+  selector:
+    app: service-test-report
+  type: NodePort
+  ports:
+    - name: http
+      port: 8080
+      nodePort: 31004
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-test-report
+spec:
+  selector:
+    matchLabels:
+      app: service-test-report
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: service-test-report
+    spec:
+      containers:
+        - name: server
+          image: maktsy/service-test-report
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-test-report
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DATABASE
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: mynewpassword
+          ports:
+            - name: http
+              containerPort: 8080
+
+---
+
